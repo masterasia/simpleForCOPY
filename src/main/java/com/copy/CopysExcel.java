@@ -69,6 +69,7 @@ public class CopysExcel {
 
     public static boolean writeExcel(List<Papers> papers) {
         boolean flag = false;
+        boolean tORt = false;
         HSSFRow row = null;
         HSSFCell cell = null;
         HSSFSheet sheet = null;
@@ -90,12 +91,27 @@ public class CopysExcel {
                 if (0 == i) {
                     cell = row.createCell(cellCount++);
                     cell.setCellValue("");
+                    if (tORt){
+                        cell = row.createCell(cellCount++);
+                        cell.setCellValue("");
+                    }else {
+                        if (paper.getKey_value().get(0).contains("\t"))
+                            tORt = true;
+                        else
+                            tORt = false;
+                    }
                     cell = row.createCell(cellCount++);
                     cell.setCellValue(paper.getName());
                 } else {
                     List<String> list = paper.getKey_value();
                     if (i >= list.size()) {
-                        cellCount = cellCount + 2;
+                        if (tORt) {
+                            cellCount = cellCount + 3;
+                        }
+                        else {
+                            cellCount = cellCount + 2;
+                        }
+
                         continue;
                     }
                     String[] s;
